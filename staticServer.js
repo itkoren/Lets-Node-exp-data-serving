@@ -3,6 +3,8 @@ var http = require("http");
 var path = require("path");
 // utilities for accessing the file system
 var fs = require("fs");
+// Include The 'url' Module
+var url = require("url");
 
 function getFile(localPath, res) {
     // read the file in and return it, or return a 500 if it can't be read
@@ -19,12 +21,15 @@ function getFile(localPath, res) {
 
 var server = http.createServer(function(req, res) {
     // look for a filename in the URL, default to index.html
-    var filename = path.basename(req.url) || "index.html";
-    var ext = path.extname(filename);
-    if ("" === ext) {
-        ext = ".html";
-        filename += ext;
-    }
+    // Parse the request querystring
+    var parsedUrl = url.parse(req.url, true);
+    var qs = parsedUrl.query;
+
+    // Get the needed file
+    var filename = path.basename(parsedUrl.pathname) || qs.file || "hello";
+    var ext = path.extname(filename) || qs.ext || ".html";
+    filename += ext;
+
     // __dirname is a built-in variable containing the path where the code is running
     var localPath = __dirname + "/public/";
     if (".html" === ext) {

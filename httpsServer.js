@@ -11,7 +11,7 @@ var options = {
 // Create the HTTP Server
 var server = https.createServer(options, function(req, res) {
     // Handle HTTPS Request
-    res.end("Hello World");
+    res.end("Hello World - This time, secured!!!");
 }).listen(process.env.PORT || 8443, process.env.HOST || "0.0.0.0", function() {
     console.log("HTTP Server Started. Listening on " + server.address().address + " : Port " + server.address().port);
 });
